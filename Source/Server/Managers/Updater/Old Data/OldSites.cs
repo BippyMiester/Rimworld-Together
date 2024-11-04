@@ -14,7 +14,7 @@ namespace GameServer.Updater
 
         public int Type;
 
-        public HumanFile WorkerData;
+        public byte[] WorkerData;
 
         public FactionFile FactionFile;
 
