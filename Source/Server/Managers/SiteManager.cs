@@ -168,7 +168,7 @@ namespace GameServer
             {
                 foreach (SiteConfigFile config in file.SiteConfigs)
                 {
-                    if (!Master.siteValues.SiteInfoFiles.Any(S => S.Rewards.Any(R => R.RewardDef == config.RewardDefName)))
+                    if (!Master.siteValues.SiteInfoFiles.Any(site => site.Rewards.Any(reward => reward.RewardDef == config.RewardDefName)))
                     {
                         Logger.Warning($"{file.Username}'s config was outdated for site {config.DefName}. Updating to new default config.", LogImportanceMode.Verbose);
                         config.RewardDefName = Master.siteValues.SiteInfoFiles.Where(S => S.DefName == config.DefName).First().Rewards.First().RewardDef;
@@ -176,8 +176,6 @@ namespace GameServer
                     }
                 }
             }
-
-            Logger.Warning("Sites now synced with new site configs");
         }
 
         public static void ChangeUserSiteConfig(ServerClient client, SiteData data)
