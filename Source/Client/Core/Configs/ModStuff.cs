@@ -41,8 +41,7 @@ namespace GameClient
 
             listingStandard.GapLine();
             listingStandard.Label("Experimental");
-            listingStandard.CheckboxLabeled("Use verbose logs", ref modConfigs.verboseBool, "Output more advanced info into the logs");
-            listingStandard.CheckboxLabeled("Use extreme verbose logs", ref modConfigs.extremeVerboseBool, "Output ALL available info into the logs");
+            if (listingStandard.ButtonTextLabeled("Verbose mode", $"{ClientValues.currentVerboseMode}")) ShowVerbosesaveFloatMenu();
 
             listingStandard.GapLine();
             listingStandard.Label("External Sources");
@@ -79,7 +78,31 @@ namespace GameClient
                     ClientValues.autosaveDays = tuple.Item2;
                     ClientValues.autosaveInternalTicks = Mathf.RoundToInt(tuple.Item2 * 60000f);
 
-                    PreferenceManager.SaveClientPreferences(ClientValues.autosaveDays.ToString());
+                    PreferenceManager.SaveClientPreferences();
+                });
+
+                list.Add(item);
+            }
+
+            Find.WindowStack.Add(new FloatMenu(list));
+        }
+
+        private void ShowVerbosesaveFloatMenu()
+        {
+            List<FloatMenuOption> list = new List<FloatMenuOption>();
+            List<Tuple<string, ClientValues.VerboseMode>> autosaveDays = new List<Tuple<string, ClientValues.VerboseMode>>()
+            {
+                Tuple.Create("None", ClientValues.VerboseMode.None),
+                Tuple.Create("Verbose", ClientValues.VerboseMode.Verbose),
+                Tuple.Create("Extreme", ClientValues.VerboseMode.Extreme)
+            };
+
+            foreach (Tuple<string, ClientValues.VerboseMode> tuple in autosaveDays)
+            {
+                FloatMenuOption item = new FloatMenuOption(tuple.Item1, delegate
+                {
+                    ClientValues.currentVerboseMode = tuple.Item2;
+                    PreferenceManager.SaveClientPreferences();
                 });
 
                 list.Add(item);

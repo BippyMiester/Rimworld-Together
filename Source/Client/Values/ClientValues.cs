@@ -23,9 +23,9 @@ namespace GameClient
 
         //ModStuff values go below. Do not change manually
 
-        public static bool verboseBool;
-        
-        public static bool extremeVerboseBool;
+        public enum VerboseMode { None, Verbose, Extreme }
+
+        public static VerboseMode currentVerboseMode;
 
         public static bool muteSoundBool;
 
