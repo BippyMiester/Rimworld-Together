@@ -416,3 +416,4 @@ Builders/Result/3005289691/Current/Assemblies/Newtonsoft.Json.dll
 
 # Visual Studio Code
 Source/.vscode/*.*
+.vscode/
