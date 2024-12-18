@@ -78,7 +78,7 @@ namespace GameServer
             {
                 RconCommand commandToFetch = CommandStorage.rconCommands.ToList().Find(x => x.prefix == parsedPrefix);
                 if (commandToFetch == null)
-                {
+                { 
                     Logger.Warning($"Command '{parsedPrefix}' was not found");
                     socket.Send($"Command '{parsedPrefix}' was not found");
                 }
