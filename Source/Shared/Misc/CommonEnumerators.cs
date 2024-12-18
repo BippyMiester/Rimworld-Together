@@ -14,7 +14,7 @@ namespace Shared
 
         public enum ServerFileMode { Configs, Actions, Sites, Roads, World, Whitelist, Difficulty, Discord, Backup, Mods, Chat }
 
-        public enum LogMode { Message, Warning, Error, Title, Outsider }
+        public enum LogMode { Message, Warning, Error, Title, Outsider, Success, Debug, VerboseDebug, Emergency, Alert, Critical, Notice, Info, Rcon }
 
         public enum LogImportanceMode { Normal, Verbose, Extreme }
 

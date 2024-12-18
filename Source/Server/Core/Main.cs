@@ -1,15 +1,41 @@
 using System.Globalization;
-using System.Reflection;
 using Shared;
 using static Shared.CommonEnumerators;
+using System.Text.RegularExpressions;
 
 namespace GameServer
 {
     public static class Main_
     {
-        static void Main()
+        private static string[] ValidStartupArguments = new string[] 
+        {
+            "server.rconport",
+            "server.rconpassword"
+        };
+        
+        static void Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.White;
+            
+            // Handle and Parse all args
+            // Example of starting your server with arguments
+            // ./GameServer +server.rconport 28016 +server.rconpassword "MySuperSecret!@#$"
+
+            var startupArgs = ParseStartupArgs(args);
+            
+            Logger.Message("Arguments passed to the server on startup are:");
+            
+            foreach (var kvp in startupArgs)
+            {
+                if (!ValidStartupArguments.Contains(kvp.Key))
+                {
+                    Logger.Error("Startup command contains an invalid argument.");
+                    Logger.Error("Arguments: " + kvp.Key);
+                    Logger.Error("Stopping server now. Fix this before continuing.");
+                    Environment.Exit(1);
+                }
+                Console.WriteLine($"Key: {kvp.Key}, Value: {kvp.Value}");
+            }
 
             SetPaths();
             SetCulture();
@@ -25,8 +51,28 @@ namespace GameServer
 
             Threader.GenerateServerThread(Threader.ServerMode.Start);
             Threader.GenerateServerThread(Threader.ServerMode.Console);
+            
+            // Start Rcon Thread
+            Threader.GenerateRconThread(Threader.RconMode.StartServer, startupArgs);
+            // Threader.GenerateRconThread(Threader.RconMode.Listen, startupArgs);
 
             while (true) Thread.Sleep(1);
+        }
+
+        public static Dictionary<string, string> ParseStartupArgs(string[] args)
+        {
+            var arguments = new Dictionary<string, string>();
+            string pattern = @"\+(?<key>[^\s]+)\s+((""(?<value>[^""]+)"")|(?<value>[^\s]+))";
+
+            string combinedArgs = string.Join(" ", args);
+            foreach (Match match in Regex.Matches(combinedArgs, pattern))
+            {
+                string key = match.Groups["key"].Value;
+                string value = match.Groups["value"].Value;
+                arguments[key] = value;
+            }
+
+            return arguments;
         }
 
         private static void TryDisableQuickEdit()

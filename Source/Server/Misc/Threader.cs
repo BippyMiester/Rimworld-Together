@@ -15,6 +15,18 @@
                 _ => throw new NotImplementedException(),
             };
         }
+        
+        public enum RconMode { StartServer, Listen }
+
+        public static Task GenerateRconThread(RconMode mode, Dictionary<string, string> args)
+        {
+            return mode switch
+            {
+                RconMode.StartServer => Task.Run(() => Rcon.StartServer(args)),
+                // RconMode.Listen => Task.Run(() => Rcon.Listen(args)),
+                _ => throw new NotImplementedException(),
+            };
+        }
 
         public enum ClientMode { Listener, Sender, Health, KAFlag }
 

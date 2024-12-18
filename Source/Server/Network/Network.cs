@@ -13,7 +13,11 @@ namespace GameServer
 
         private static IPAddress localAddress = IPAddress.Parse(Master.serverConfig.IP);
 
-        public static int port = int.Parse(Master.serverConfig.Port);
+        #if DEBUG
+            public static int port = 46000;
+        #else
+            public static int port = int.Parse(Master.serverConfig.Port);
+        #endif
 
         //TCP listener that will handle the connection with the clients, and list of currently connected clients
 
